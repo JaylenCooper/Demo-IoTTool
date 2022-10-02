@@ -2,10 +2,11 @@ version: "3.6"
 services:
   broadlinkmanager:
     image: techblog/broadlinkmanager
-    network_mode: host
     container_name: broadlinkmanager
     restart: unless-stopped
     volumes:
       - ./broadlinkmanager:/opt/broadlinkmanager/data
     environment:
       - ENABLE_GOOGLE_ANALYTICS=False
+    ports:
+      - "127.0.0.1:2002:7020"
