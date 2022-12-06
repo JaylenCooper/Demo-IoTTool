@@ -5,6 +5,9 @@ This is a very simple all-in-one script to manage the iot devices from the CLI.
 This can be very useful to create other script and automation of the routines in your house.
 This idea was born for personal use only. Enjoy.
 
+## Acknowledgments
+This script uses other libraries and tools made by others. Please say thanks to the creators of those tools.
+
 ## Install
 
 First of all install dependencies (assuming you are using python3):
@@ -185,21 +188,27 @@ Config example (the values are randomly generated).
 }
 ```
 
-## Broadlink
+## Supported IoT frameworks/devices
 
-## Tuya
+### Broadlink
+Please check https://github.com/t0mer/broadlinkmanager-docker for broadlink device connection and usage.
+
+### Switchbot
+Please check https://github.com/OpenWonderLabs/SwitchBotAPI for SwitchBot API documentation.
+
+### Tuya
 You can find mode information about tuya checking both: https://pypi.org/project/tinytuya/ and https://tuya.com/
-### Scan tuya devices
+#### Scan tuya devices
 ```shell
 python -m tinytuya scan
 ```
 Then check the `snapshot.json` created file
-### Tuya wizard:
+#### Tuya wizard:
 ```shell
 python -m tinytuya wizard
 ```
 Then check the `tinituya.json` and the `devices.json` created files to discover information about your device.
 
-### Tuya limitations
+#### Tuya limitations
 Currently this script supports only tuya devices on/off.
 If you want to control more features you can use the `tinytuya` library to discover the commands to send to the device.
