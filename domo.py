@@ -9,7 +9,13 @@ import sys
 import time
 
 import requests
+import tinytuya
 
+
+# More information about tuya check both: https://pypi.org/project/tinytuya/ and https://eu.iot.tuya.com/
+# Scan tuya devices using:
+# python -m tinytuya scan
+# Then check the snapshot.json created file
 
 def get_switchbot_auth_params(token, secret, nonce):
     t = int(round(time.time() * 1000))
@@ -48,6 +54,12 @@ class Domo:
         'nonce': nonce
     }
 
+    tuya_config = config['tuya']
+    tuya_devices = tuya_config['devices']
+    tuya_api_key = tuya_config['api_key']
+    tuya_api_secret = tuya_config['api_secret']
+    tuya_api_region = tuya_config['api_region']
+
     def main(self):
         if len(sys.argv) <= 0:
             print('Command not defined')
@@ -61,6 +73,9 @@ class Domo:
 
         if device in self.switchbot_devices:
             self.send_switchbot_command(self.switchbot_devices[device], command)
+
+        if device in self.tuya_devices:
+            self.send_tuya_command(self.tuya_devices[device], command)
 
     def send_broadlink_command(self, device_config, command):
         commands = device_config['commands']
@@ -90,6 +105,19 @@ class Domo:
         devices = requests.get(url=self.switchbot_base_url + '/v1.1/devices', headers=self.switchbot_headers)
         devices = devices.json()['body']
         print(devices)
+
+    def send_tuya_command(self, device_config, command):
+        if command in device_config['commands']:
+            device = tinytuya.OutletDevice(
+                dev_id=device_config['id'],
+                address=device_config['ip'],
+                local_key=device_config['key'],
+                version=device_config['ver'])
+
+            if 'on' in command:
+                device.turn_on()
+            if 'off' in command:
+                device.turn_off()
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./broadlinkmanager:/opt/broadlinkmanager/data
-    environment:
-      - ENABLE_GOOGLE_ANALYTICS=False
     ports:
       - "127.0.0.1:2002:7020"
+    environment:
+      - ENABLE_GOOGLE_ANALYTICS=False
