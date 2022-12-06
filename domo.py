@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 
 import base64
 import hashlib
@@ -7,15 +7,9 @@ import json
 import os
 import sys
 import time
-
 import requests
 import tinytuya
 
-
-# More information about tuya check both: https://pypi.org/project/tinytuya/ and https://eu.iot.tuya.com/
-# Scan tuya devices using:
-# python -m tinytuya scan
-# Then check the snapshot.json created file
 
 def get_switchbot_auth_params(token, secret, nonce):
     t = int(round(time.time() * 1000))
@@ -27,38 +21,33 @@ def get_switchbot_auth_params(token, secret, nonce):
 
 
 class Domo:
-    config_home = os.environ.get('DOMO_ROOT', os.path.expanduser('~') + '/.config/domo/')
-    config_path = os.path.join(config_home + 'config.json')
+    def __init__(self, config_filepath):
+        with open(config_filepath) as file:
+            self.config = json.load(file)
 
-    f = open(config_path)
-    config = json.load(f)
-
-    broadlink_config = config['broadlink']
-    manager_url = broadlink_config['manager_url']
-    command_url = manager_url + broadlink_config['command_endpoint']
-    broadlink_devices = broadlink_config['devices']
-
-    switchbot_config = config['switchbot']
-    switchbot_devices = switchbot_config['devices']
-    switchbot_base_url = switchbot_config['base_url']
-    sign, t, nonce = get_switchbot_auth_params(
-        switchbot_config['token'],
-        switchbot_config['secret'],
-        switchbot_config['nonce']
-    )
-    switchbot_headers = {
-        'Content-type': 'application/json; charset=utf8',
-        'Authorization': switchbot_config['token'],
-        'sign': sign,
-        't': t,
-        'nonce': nonce
-    }
-
-    tuya_config = config['tuya']
-    tuya_devices = tuya_config['devices']
-    tuya_api_key = tuya_config['api_key']
-    tuya_api_secret = tuya_config['api_secret']
-    tuya_api_region = tuya_config['api_region']
+        self.broadlink_config = self.config['broadlink']
+        self.manager_url = self.broadlink_config['manager_url']
+        self.command_url = self.manager_url + self.broadlink_config['command_endpoint']
+        self.broadlink_devices = self.broadlink_config['devices']
+    
+        self.switchbot_config = self.config['switchbot']
+        self.switchbot_devices = self.switchbot_config['devices']
+        self.switchbot_base_url = self.switchbot_config['base_url']
+        self.sign, self.t, self.nonce = get_switchbot_auth_params(
+            self.switchbot_config['token'],
+            self.switchbot_config['secret'],
+            self.switchbot_config['nonce']
+        )
+        self.switchbot_headers = {
+            'Content-type': 'application/json; charset=utf8',
+            'Authorization': self.switchbot_config['token'],
+            'sign': self.sign,
+            't': self.t,
+            'nonce': self.nonce
+        }
+    
+        self.tuya_config = self.config['tuya']
+        self.tuya_devices = self.tuya_config['devices']
 
     def main(self):
         if len(sys.argv) <= 0:
@@ -106,7 +95,8 @@ class Domo:
         devices = devices.json()['body']
         print(devices)
 
-    def send_tuya_command(self, device_config, command):
+    @staticmethod
+    def send_tuya_command(device_config, command):
         if command in device_config['commands']:
             device = tinytuya.OutletDevice(
                 dev_id=device_config['id'],
@@ -121,4 +111,7 @@ class Domo:
 
 
 if __name__ == '__main__':
-    Domo().main()
+    config_home = os.environ.get('DOMO_ROOT', os.path.expanduser('~') + '/.config/domo/')
+    config_path = os.path.join(config_home + 'config.json')
+    domo = Domo(config_path)
+    domo.main()
