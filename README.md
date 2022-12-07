@@ -10,7 +10,12 @@ This script uses other libraries and tools made by others. Please say thanks to 
 
 ## Install
 
-First of all install dependencies (assuming you are using python3):
+You can install this using an AUR helper if you are on Arch Linux based distro.
+```shell
+yay -S domo-git
+```
+
+Otherwise, first of all install dependencies (assuming you are using python3):
 ```shell
 python -m pip install -r ./requirements.txt
 ```
