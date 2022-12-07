@@ -1,3 +1,4 @@
+.env
 devices.json
 snapshot.json
 tinytuya.json
