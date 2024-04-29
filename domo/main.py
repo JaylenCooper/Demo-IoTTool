@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
-
 import base64
 import hashlib
 import hmac
 import json
-import os
 import sys
 import time
+
 import requests
 import tinytuya
 
@@ -49,7 +47,7 @@ class Domo:
         self.tuya_config = self.config['tuya']
         self.tuya_devices = self.tuya_config['devices']
 
-    def main(self):
+    def run(self):
         if len(sys.argv) <= 0:
             print('Command not defined')
             exit(1)
@@ -108,10 +106,3 @@ class Domo:
                 device.turn_on()
             if 'off' in command:
                 device.turn_off()
-
-
-if __name__ == '__main__':
-    config_home = os.environ.get('DOMO_ROOT', os.path.expanduser('~') + '/.config/domo/')
-    config_path = os.path.join(config_home + 'config.json')
-    domo = Domo(config_path)
-    domo.main()

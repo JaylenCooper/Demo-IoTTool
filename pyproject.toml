@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "domo"
+version = "1.0.2"
+description = "Domo is a very simple all-in-one script to manage the iot devices from the CLI."
+authors = ["ZappaBoy <federico.zappone@justanother.cloud>"]
+maintainers = ["ZappaBoy <federico.zappone@justanother.cloud>"]
+readme = "README.md"
+packages = [{ include = "domo" }]
+homepage = "https://github.com/ZappaBoy/domo"
+repository = "https://github.com/ZappaBoy/domo"
+documentation = "https://github.com/ZappaBoy/domo/blob/main/README.md"
+keywords = ["domo", "domotics"]
+classifiers = [
+    "Topic :: Utilities",
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+tinytuya = "^1.13.2"
+cryptography = "^42.0.5"
+
+
+[tool.poetry.group.dev.dependencies]
+poetry2setup = "^1.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+domo = "domo:main"

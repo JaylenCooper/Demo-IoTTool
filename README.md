@@ -22,7 +22,7 @@ python -m pip install -r ./requirements.txt
 
 Then install the script in a local bin folder
 ```shell
-install domo.py ~/.local/bin/domo
+install main.py ~/.local/bin/domo
 ```
 
 If you are planning to use boradlink devices you can run an instance of the broadlink manager using docker.
