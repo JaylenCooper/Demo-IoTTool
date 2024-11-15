@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+_comp_cmd_domo(){
+    local cur prev suggestions config_dir config_path
+    config_dir="${DOMO_ROOT:-"$HOME/.config/domo"}"
+    config_path="${config_dir}/config.json"
+
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    [[ ! -f "$config_path" ]] && return 1
+
+    if [[ $COMP_CWORD -eq 1 ]]; then
+        suggestions=$(jq -r '.[] | .devices | keys[]' "$config_path")
+    elif [[ $COMP_CWORD -eq 2 ]]; then
+        local device="${prev}"
+        suggestions=$(jq -r --arg device "$device" '.[] | .devices[$device].commands | try keys[]' "$config_path")
+    else
+        suggestions=""
+    fi
+
+    COMPREPLY=( $(compgen -W "$suggestions" -- "$cur") )
+}
+complete -F _comp_cmd_domo domo
