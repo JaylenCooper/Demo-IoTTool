@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "domo"
-version = "1.0.2"
+version = "1.0.3"
 description = "Domo is a very simple all-in-one script to manage the iot devices from the CLI."
 authors = ["ZappaBoy <federico.zappone@justanother.cloud>"]
 maintainers = ["ZappaBoy <federico.zappone@justanother.cloud>"]
